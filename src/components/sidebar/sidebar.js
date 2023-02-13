@@ -22,7 +22,7 @@ import { userState } from 'atom/userAtom';
 import { db } from '../../../firebase';
 import { onBaordState } from 'atom/modalAtom';
 
-export default function Sidebar({ theme, setTheme }) {
+export default function Sidebar({ setThemeRecoilState, themeRecoilState }) {
     const router = useRouter();
     const [currentUser, setCurrentUser] = useRecoilState(userState);
     const [onBoardMoal, setOnBoardMoal] = useRecoilState(onBaordState);
@@ -64,8 +64,10 @@ export default function Sidebar({ theme, setTheme }) {
             <div className="mt-4 mb-2.5 xl:items-start">
                 <SidebarMenuItem text="Home" Icon={HomeIcon} active />
                 <SidebarMenuItem text="Explore" Icon={HashtagIcon} />
-                <div onClick={() => setTheme(theme === "light" ? "dark" : "light")}>
-                    {theme !== 'light' ?
+                <div onClick={() => {
+                    setThemeRecoilState(!themeRecoilState)
+                    }}>
+                    {themeRecoilState ?
                         <SidebarMenuItem text="Light" Icon={LightBulbIcon} /> :
                         <SidebarMenuItem text="Dark" Icon={MoonIcon} />}
                 </div>

@@ -227,6 +227,9 @@ textarea {
   background-color: #ddbbd3;
   transition: all 0.5s;
 }
+.Toastify__toast-container {
+  z-index: 9999 !important;
+}
 .modal {
     max-width: 40rem;
     width: 90%;
@@ -242,7 +245,7 @@ textarea {
 }
 .ReactModal__Overlay {
   background-color: rgb(140 140 140 / 75%) !important;
-  z-index: 100000;
+  z-index: 9998;
 }
 .onboard-content {
   padding-left: 28%;

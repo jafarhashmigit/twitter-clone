@@ -1,7 +1,4 @@
 import { ArrowLeftIcon } from "@heroicons/react/outline";
-import Head from "next/head";
-import Sidebar from "@/components/sidebar/sidebar";
-import Widgets from "@/components/widgets/widgets";
 import Post from "@/components/feed/post";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -15,29 +12,18 @@ import {
 import { db } from "../../../firebase";
 import Comment from "@/components/comment/comment";
 import { AnimatePresence, motion } from "framer-motion";
-import CommentModal from "@/components/comment/commentModal";
 import Layout from "@/components/Layout/layout";
 
-export default function PostPage({ newsResults, randomUsersResults }) {
+export default function PostPage({}) {
   const router = useRouter();
   const { id } = router.query;
   const [post, setPost] = useState();
   const [comments, setComments] = useState([]);
 
-  const [theme, setTheme] = useState('light'); 
-  useEffect(() => {
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    setTheme(prefersDark ? 'dark' : 'light');
-  }, []);
-
-  // get the post data
-
   useEffect(
     () => onSnapshot(doc(db, "posts", id), (snapshot) => setPost(snapshot)),
     [db, id]
   );
-
-  // get comments of the post
 
   useEffect(() => {
     onSnapshot(
@@ -89,31 +75,4 @@ export default function PostPage({ newsResults, randomUsersResults }) {
       </Layout>
     </div>
   );
-}
-
-export async function getServerSideProps() {
-  const newsResults = await fetch(
-    "https://saurav.tech/NewsAPI/top-headlines/category/business/us.json"
-  ).then((res) => res.json());
-
-  // Who to follow section
-
-  let randomUsersResults = [];
-
-  try {
-    const res = await fetch(
-      "https://randomuser.me/api/?results=30&inc=name,login,picture"
-    );
-
-    randomUsersResults = await res.json();
-  } catch (e) {
-    randomUsersResults = [];
-  }
-
-  return {
-    props: {
-      newsResults,
-      randomUsersResults,
-    },
-  };
 }

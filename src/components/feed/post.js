@@ -99,7 +99,7 @@ export default function Post({ post, id }) {
 
         <p
           onClick={() => router.push(`/posts/${id}`)}
-          className=" text-[15px sm:text-[16px] mb-2"
+          className=" text-[15px sm:text-[16px] mb-2 w-[100%] break-all"
         >
           {post?.data()?.text}
         </p>

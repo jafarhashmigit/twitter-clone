@@ -6,14 +6,15 @@ import Widgets from "@/components/widgets/widgets";
 import { useEffect, useState } from "react";
 import CommentModal from "@/components/comment/commentModal";
 import Onboarding from "@/components/onboarding/onboarding";
-export default function Layout({newsResults, randomUsersResults, children }) {
-  const [theme, setTheme] = useState("light");
+import { themeState } from "atom/userAtom";
+import { useRecoilState } from "recoil";
+export default function Layout({ newsResults, randomUsersResults, children }) {
+  const [themeRecoilState, setThemeRecoilState] = useRecoilState(themeState);
+  const [theme, setTheme] = useState(themeRecoilState ? "dark" : "light");
+
   useEffect(() => {
-    const prefersDark = window.matchMedia(
-      "(prefers-color-scheme: dark)"
-    ).matches;
-    setTheme(prefersDark ? "dark" : "light");
-  }, []);
+    setTheme(themeRecoilState ? "dark" : "light");
+  }, [themeRecoilState]);
 
   return (
     <>
@@ -28,12 +29,18 @@ export default function Layout({newsResults, randomUsersResults, children }) {
       </Head>
       <main className={`${theme} flex min-h-screen mx-auto`}>
         {/* Sidebar */}
-        <Sidebar setTheme={setTheme} theme={theme} />
+        <Sidebar
+          setThemeRecoilState={setThemeRecoilState}
+          themeRecoilState={themeRecoilState}
+        />
         {/* Feeds */}
         {/* <Feed /> */}
         {children}
         {/* Widgets */}
-        <Widgets newsResults={newsResults} randomUsersResults={randomUsersResults}  />
+        <Widgets
+          newsResults={newsResults}
+          randomUsersResults={randomUsersResults}
+        />
         {/* Modal */}
         <CommentModal theme={theme} />
         <Onboarding theme={theme} />

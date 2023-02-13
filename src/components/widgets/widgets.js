@@ -45,7 +45,6 @@ export default function Widgets({ newsResults }) {
         query(collection(db, "users"),limitToLast(10), orderBy("timestamp", "desc")),
         (snapshot) => {
           setLatestUsers(snapshot.docs)
-          console.log("users",snapshot.docs, snapshot.docs[0].data());
         }
       ),
     []

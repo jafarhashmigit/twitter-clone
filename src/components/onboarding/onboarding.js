@@ -14,6 +14,7 @@ import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
 import { useRouter } from "next/router";
 import { db, auth } from "../../../firebase";
 import { useState } from "react";
+import { toast } from 'react-toastify';
 
 export default function Onboarding({ theme }) {
   const [open, setOpen] = useRecoilState(onBaordState);
@@ -49,8 +50,25 @@ export default function Onboarding({ theme }) {
       console.log(error);
     }
   };
+  function validateFields() {
+    if (!name || !email || !username || !password) {
+        toast.error("All fields are required.");
+        return true;
+    }
+
+    if (password.length <= 6) {
+        toast.error("Password must be greater than 6 characters.");
+        return true;
+    }
+
+    if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+        toast.error("Email is not valid.");
+        return true;
+    }
+}
   const onSignUp = async () => {
     try {
+      if(validateFields()) return null;
       await createUserWithEmailAndPassword(auth, email, password)
         .then(async function (data) {
           console.log("Sign up successful!", data?.user?.providerData[0]);
@@ -74,9 +92,11 @@ export default function Onboarding({ theme }) {
           }
         })
         .catch(function (error) {
-          console.error("Sign up failed:", error);
+          toast.error("Sign up failed ", error?.message)
         });
-    } catch (error) {}
+    } catch (error) {
+      toast.error("Sign up failed ", error?.message)
+    }
   };
   const onSignIn = async () => {
     try {
@@ -88,7 +108,9 @@ export default function Onboarding({ theme }) {
           router.push("/");
         }
       );
-    } catch (error) {}
+    } catch (error) {
+      toast.error("Sign up failed ", error?.message)
+    }
   };
   return (
     <>
