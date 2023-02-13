@@ -3,7 +3,9 @@
 ## Getting Started
 
 First, install npm packages:
+```bash
 npm run dev
+```
 
 Second, run the development server:
 ```bash
